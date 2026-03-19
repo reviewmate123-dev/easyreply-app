@@ -16,7 +16,7 @@ import {
   RefreshCw,
   Filter
 } from 'lucide-react';
-import { getStatusColor, getStatusLabel, ReviewStatus } from '@/lib/review-status';
+import { getStatusColor, getStatusLabel, type ReviewStatus } from '@/lib/review-status-shared';
 
 interface Review {
   id: string;
