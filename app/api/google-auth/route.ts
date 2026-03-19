@@ -3,6 +3,8 @@ import { cookies } from 'next/headers'
 import { adminAuth } from '@/lib/firebase-admin'
 import { getGoogleAuthURL } from '@/lib/google-oauth'
 
+export const dynamic = 'force-dynamic'
+
 export async function GET(request: NextRequest) {
   try {
     // Get session cookie

@@ -4,6 +4,8 @@ import { getGoogleTokens } from '@/lib/google-oauth'
 import { FieldValue } from 'firebase-admin/firestore'
 import { google } from 'googleapis'
 
+export const dynamic = 'force-dynamic'
+
 async function fetchWithRetry(fn: () => Promise<any>, retries = 3, delay = 2000) {
   for (let i = 0; i < retries; i++) {
     try {
