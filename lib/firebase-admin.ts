@@ -2,25 +2,48 @@ import 'server-only';
 
 import * as admin from "firebase-admin";
 
-const projectId = process.env.FIREBASE_PROJECT_ID;
-const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
-const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
+function getFirebaseAdminApp() {
+  const projectId = process.env.FIREBASE_PROJECT_ID;
+  const clientEmail = process.env.FIREBASE_CLIENT_EMAIL;
+  const privateKey = process.env.FIREBASE_PRIVATE_KEY?.replace(/\\n/g, "\n");
 
-if (!projectId || !clientEmail || !privateKey) {
-  throw new Error("Firebase Admin ENV variables are missing");
+  if (!projectId || !clientEmail || !privateKey) {
+    throw new Error("Firebase Admin ENV variables are missing");
+  }
+
+  if (!admin.apps.length) {
+    admin.initializeApp({
+      credential: admin.credential.cert({
+        projectId,
+        clientEmail,
+        privateKey,
+      }),
+    });
+  }
+
+  return admin.app();
 }
 
-if (!admin.apps.length) {
-  admin.initializeApp({
-    credential: admin.credential.cert({
-      projectId,
-      clientEmail,
-      privateKey,
-    }),
-  });
+function getAdminDb() {
+  getFirebaseAdminApp();
+  return admin.firestore();
 }
 
-const adminDb = admin.firestore();
+function getAdminAuth() {
+  getFirebaseAdminApp();
+  return admin.auth();
+}
 
-export const adminAuth = admin.auth();
-export { adminDb };
+export const adminDb = new Proxy({} as admin.firestore.Firestore, {
+  get(_target, prop) {
+    const db = getAdminDb() as unknown as Record<PropertyKey, unknown>;
+    return db[prop];
+  },
+}) as admin.firestore.Firestore;
+
+export const adminAuth = new Proxy({} as admin.auth.Auth, {
+  get(_target, prop) {
+    const auth = getAdminAuth() as unknown as Record<PropertyKey, unknown>;
+    return auth[prop];
+  },
+}) as admin.auth.Auth;
