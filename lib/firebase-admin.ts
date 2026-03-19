@@ -1,3 +1,5 @@
+import 'server-only';
+
 import * as admin from "firebase-admin";
 
 const projectId = process.env.FIREBASE_PROJECT_ID;

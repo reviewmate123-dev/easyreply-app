@@ -1,3 +1,5 @@
+import 'server-only';
+
 // lib/openai.ts
 // OpenAI setup - Sirf structure, actual call nahi
 

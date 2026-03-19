@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { google } from 'googleapis'
 import { adminDb } from './firebase-admin'
 import { FieldValue } from 'firebase-admin/firestore'

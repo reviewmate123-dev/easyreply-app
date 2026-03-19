@@ -1,3 +1,5 @@
+import 'server-only';
+
 import { refreshAccessTokenIfNeeded } from './token-refresh'
 import { adminDb } from './firebase-admin'
 
